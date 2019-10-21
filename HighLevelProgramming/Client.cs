@@ -12,7 +12,17 @@ namespace HighLevelProgramming
 
         public string LastName { get; set; }
 
+        public string GetFullName()
+        {
+            return FirstName + " " + LastName;
+        }
         public int Id { get; set; }
+        
+        public VideoStore FavoriteVideoStore { get; set; }
+        
+        public Client[] BestFriends { get; set; }
+
+        public StoreMembership[] StoreMemberships { get; set; }
 
         public int ActionMovieRating
         {
@@ -58,6 +68,27 @@ namespace HighLevelProgramming
 
                 _comedyMovieRating = value;
             }
+        }
+
+        public string GetFavoriteGenre()
+        {
+            //Evaluates which genre the client prefers
+            string favoriteGenre;
+            if (ActionMovieRating > HorrorMovieRating)
+            {
+                favoriteGenre = ActionMovieRating > ComedyMovieRating ? "action" : "comedy";
+            }
+            else
+            {
+                favoriteGenre = HorrorMovieRating > ComedyMovieRating ? "horror" : "comedy";
+            }
+
+            return favoriteGenre;
+        }
+
+        public override string ToString()
+        {
+            return GetFullName();
         }
     }
 }

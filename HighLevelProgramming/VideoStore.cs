@@ -12,17 +12,7 @@ namespace HighLevelProgramming
 
         public bool IsRecommendedToClient(Client client)
         {
-            //Evaluates which genre the client prefers
-            string favoriteGenre;
-            if (client.ActionMovieRating > client.HorrorMovieRating)
-            {
-                favoriteGenre = client.ActionMovieRating > client.ComedyMovieRating ? "action" : "comedy";
-            }
-            else
-            {
-                favoriteGenre = client.HorrorMovieRating > client.ComedyMovieRating ? "horror" : "comedy";
-            }
-
+            string favoriteGenre = client.GetFavoriteGenre();
             //Returns true if the store best selling genre is the client's favorite genre
             return (favoriteGenre == BestSellingGenre);
         }
@@ -35,14 +25,37 @@ namespace HighLevelProgramming
             //Place in line defaults to people in line + 1
             int turn = AveragePeopleInLineCount + 1;
             //If there is a membership program and the client is a member, the client moves up 2 spaces in line
-            if (HasMembershipProgram && Members.Contains(client))
+            if (HasMembershipProgram && HasMember(client))
             {
-                turn = turn - 2;
+                turn -= 2;
                 //If they are the first person in line
                 turn = turn < 1 ? 1 : turn;
             }
+            
+            //If the client or one of his best friends has this store as their Favorite Store
+            //the client moves up 1 space in line
+            if (client.FavoriteVideoStore == this)
+            {
+                turn -= 1;
+                //If they are the first person in line
+                turn = turn < 1 ? 1 : turn;
+            }
+            else
+            {
+                if (client.BestFriends.Any(friend => friend.FavoriteVideoStore == this))
+                {
+                    turn -= 1;
+                    //If they are the first person in line
+                    turn = turn < 1 ? 1 : turn;
+                }
+            }
 
             return turn;
+        }
+
+        public override string ToString()
+        {
+            return StoreName;
         }
     }
 }

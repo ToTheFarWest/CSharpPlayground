@@ -28,8 +28,21 @@ namespace HighLevelProgramming
         }
         
         public bool HasMembershipProgram { get; set; }
-        
-        public Client[] Members { get; set; }
-        
+
+        public StoreMembership[] StoreMembers { get; set; }
+
+        public bool HasMember(Client client)
+        {
+            foreach (var storeMember in StoreMembers)
+            {
+                if (storeMember.Client == client)
+                    return true;
+            }
+
+            return false;
+        }
+
+
+
     }
 }
